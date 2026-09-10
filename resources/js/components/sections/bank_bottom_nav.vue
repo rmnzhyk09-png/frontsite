@@ -35,7 +35,7 @@ defineEmits<{
   justify-content: space-around;
   height: 62px;
   background: var(--bg-card);
-  border-top: 3px solid var(--border-default);
+  border-top: 3px solid var(--bg-brand);
   padding: 0 20px;
   position: fixed;
   bottom: 0;
@@ -49,24 +49,29 @@ defineEmits<{
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 4px 12px;
+  padding: 8px 16px;
+  border-radius: var(--radius-button);
   background: none;
   border: none;
   cursor: pointer;
   color: var(--text-secondary);
   font-family: var(--font-main);
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
 
 .bottom-nav__item:hover {
   color: var(--text-primary);
 }
 
+.bottom-nav__item:focus-visible {
+  outline: 2px solid var(--bg-brand);
+  outline-offset: 2px;
+}
+
 .bottom-nav__item--active {
+  background-color: var(--bg-brand-light);
   color: var(--text-brand);
-  border-top: 3px solid var(--bg-brand);
-  margin-top: -3px;
-  padding-top: 1px;
+  font-weight: 600;
 }
 
 .bottom-nav__label {

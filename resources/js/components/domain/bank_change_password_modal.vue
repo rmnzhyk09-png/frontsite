@@ -1,0 +1,84 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import BankBaseModal from '@/components/base/bank_base_modal.vue'
+import BankBaseButton from '@/components/base/bank_base_button.vue'
+import BankBaseIcon from '@/components/base/bank_base_icon.vue'
+
+defineProps<{
+  open: boolean
+}>()
+
+const emit = defineEmits<{
+  close: []
+  save: [password: string]
+}>()
+
+const password = ref('')
+const confirm = ref('')
+const error = ref('')
+
+function handleSave() {
+  if (password.value.length < 8) {
+    error.value = 'La password deve contenere almeno 8 caratteri'
+    return
+  }
+  if (password.value !== confirm.value) {
+    error.value = 'Le password non coincidono'
+    return
+  }
+  error.value = ''
+  emit('save', password.value)
+  emit('close')
+  password.value = ''
+  confirm.value = ''
+}
+</script>
+
+<template>
+  <bank-base-modal :open="open" title="Cambia password" @close="$emit('close')">
+    <label class="field" for="modal-pass">
+      <span class="field__label">Nuova password</span>
+      <input
+        id="modal-pass"
+        v-model="password"
+        type="password"
+        class="field__input"
+        autocomplete="new-password"
+      />
+    </label>
+    <label class="field" for="modal-pass-confirm">
+      <span class="field__label">Conferma password</span>
+      <input
+        id="modal-pass-confirm"
+        v-model="confirm"
+        type="password"
+        class="field__input"
+        autocomplete="new-password"
+      />
+    </label>
+    <p v-if="error" class="field__error" role="alert">{{ error }}</p>
+    <bank-base-button variant="primary" size="md" full-width @click="handleSave">
+      <bank-base-icon name="lock" :size="14" color="#ffffff" />
+      Salva
+    </bank-base-button>
+  </bank-base-modal>
+</template>
+
+<style scoped>
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field__label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.field__input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-button);
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+}
+.field__input:focus {
+  border-color: var(--bg-brand);
+}
+.field__error { font-size: 12px; color: var(--bg-danger); }
+</style>

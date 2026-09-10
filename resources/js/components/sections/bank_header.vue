@@ -22,9 +22,9 @@ defineEmits<{
       <div class="header__inner">
         <div class="header__nav">
           <div class="header__logo">
-            <div class="header__logo-icon">
-              <bank-base-icon name="bank" :size="20" color="var(--text-brand)" />
-            </div>
+            <span class="header__logo-mark" aria-hidden="true">
+              <bank-base-icon name="bank" :size="24" color="#2491aa" />
+            </span>
             <span class="header__logo-text">Avanti</span>
           </div>
           <nav class="header__menu" aria-label="Основная навигация">
@@ -40,11 +40,20 @@ defineEmits<{
             </button>
           </nav>
         </div>
-        <button class="header__assistenza" @click="$emit('assistenza')">
+        <button class="header__assistenza" type="button" @click="$emit('assistenza')">
           <bank-base-icon name="message" :size="14" color="#ffffff" />
           <span class="header__assistenza-text">Assistenza</span>
           <span v-if="notificationCount > 0" class="header__badge">{{ notificationCount }}</span>
         </button>
+        <div class="header__actions">
+          <button class="header__bell" type="button" aria-label="Уведомления" @click="$emit('assistenza')">
+            <bank-base-icon name="bell" :size="16" />
+            <span v-if="notificationCount > 0" class="header__bell-count">{{ notificationCount }}</span>
+          </button>
+          <div class="header__avatar-wrap" :aria-label="`Аватар ${user.firstName}`">
+            <bank-base-avatar :name="`${user.firstName} ${user.lastName}`" :avatar="user.avatar" size="md" />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -74,7 +83,6 @@ defineEmits<{
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid var(--border-default);
 }
 
 .header__top {
@@ -88,30 +96,34 @@ defineEmits<{
   justify-content: space-between;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 16px 32px 0;
   height: 111px;
 }
 
 .header__nav {
   display: flex;
   align-items: center;
-  gap: 52px;
+  gap: 49px;
 }
 
 .header__logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
 }
 
-.header__logo-icon {
-  width: 32px;
-  height: 32px;
+.header__logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 37.6px;
 }
 
 .header__logo-text {
   font-size: 32px;
   font-weight: 700;
+  letter-spacing: -1.6px;
   color: var(--text-black);
 }
 
@@ -124,7 +136,7 @@ defineEmits<{
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 10px 16px;
   border-radius: var(--radius-button);
   background: var(--bg-page);
   border: 1px solid transparent;
@@ -138,7 +150,6 @@ defineEmits<{
 
 .header__nav-item:hover {
   background-color: var(--bg-brand-light);
-  border-color: var(--bg-brand-light);
 }
 
 .header__nav-item--active {
@@ -148,16 +159,13 @@ defineEmits<{
   font-weight: 600;
 }
 
-.header__nav-item:focus-visible {
-  outline: 2px solid var(--bg-brand);
-  outline-offset: 2px;
-}
-
 .header__assistenza {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
-  padding: 10px 12px;
+  width: 156px;
+  height: 39px;
   border-radius: var(--radius-button);
   background: var(--bg-brand);
   border: none;
@@ -171,15 +179,13 @@ defineEmits<{
 }
 
 .header__assistenza:hover { background-color: var(--bg-brand-dark); }
-.header__assistenza:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; }
 
 .header__badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  min-width: 22px;
+  top: -5px;
+  right: -5px;
+  width: 22px;
   height: 22px;
-  padding: 0 6px;
   border-radius: 11px;
   background-color: var(--bg-danger);
   color: var(--text-white);
@@ -204,75 +210,69 @@ defineEmits<{
   padding: 10px 72px;
 }
 
-.header__profile {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
+.header__profile { display: flex; align-items: center; gap: 20px; }
+.header__profile-info { display: flex; flex-direction: column; }
+.header__profile-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.header__profile-email { font-size: 12px; font-weight: 400; color: var(--text-secondary); }
 
-.header__profile-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.header__profile-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.header__profile-email {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--text-secondary);
-}
-
-.header__breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.header__breadcrumb-item {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-
-.header__breadcrumb-sep {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-disabled);
-}
-
-.header__breadcrumb-current {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
+.header__breadcrumb { display: flex; align-items: center; gap: 8px; }
+.header__breadcrumb-item { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
+.header__breadcrumb-sep { font-size: 14px; font-weight: 500; color: var(--text-disabled); }
+.header__breadcrumb-current { font-size: 14px; font-weight: 600; color: var(--text-primary); }
 
 @media (max-width: 767px) {
-  .header__inner {
-    padding: 0 16px;
-    height: 62px;
-  }
-
+  .header__inner { padding: 0 16px; height: 62px; }
   .header__menu { display: none; }
-  .header__assistenza-text { display: none; }
+  .header__logo-mark { width: 30px; height: 24px; }
+  .header__logo-text { font-size: 22px; letter-spacing: -1.1px; }
+  .header__actions { display: flex; align-items: center; gap: 10px; }
 
-  .header__assistenza {
+  .header__bell {
+    position: relative;
     width: 38px;
     height: 38px;
-    padding: 0;
     border-radius: 6.33px;
+    background: var(--bg-brand-light);
+    border: none;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    color: var(--text-brand);
   }
 
+  .header__bell-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    background-color: var(--bg-danger);
+    color: var(--text-white);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-card);
+  }
+
+  .header__avatar-wrap {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    border: 1px solid var(--bg-brand);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-brand-light);
+    color: var(--text-brand);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .header__assistenza { display: none; }
   .header__bottom { display: none; }
-
-  .header__logo-text {
-    font-size: 22px;
-    letter-spacing: -1.1px;
-  }
 }
 </style>

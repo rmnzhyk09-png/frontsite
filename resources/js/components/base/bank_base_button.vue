@@ -52,10 +52,10 @@ defineEmits<{
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn--primary {
-  background-color: var(--bg-page);
-  color: var(--text-primary);
+  background-color: var(--bg-brand);
+  color: var(--text-white);
 }
-.btn--primary:hover:not(:disabled) { background-color: var(--border-default); }
+.btn--primary:hover:not(:disabled) { background-color: var(--bg-brand-dark); }
 
 .btn--dark {
   background-color: var(--text-black);
@@ -65,7 +65,7 @@ defineEmits<{
 .btn--dark:hover:not(:disabled) { background-color: #222; }
 
 .btn--outline-brand {
-  background-color: transparent;
+  background-color: var(--bg-card);
   color: var(--text-brand);
   border: 1.5px solid var(--border-brand);
 }

@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { PersonalData } from '@/types'
 import BankBaseButton from '@/components/base/bank_base_button.vue'
 import BankBaseIcon from '@/components/base/bank_base_icon.vue'
 
-defineProps<{
+const props = defineProps<{
   data: PersonalData
   compact?: boolean
 }>()
@@ -11,6 +12,8 @@ defineProps<{
 defineEmits<{
   edit: []
 }>()
+
+const copied = ref(false)
 
 const fields = [
   { key: 'cognome', label: 'Cognome' },
@@ -20,13 +23,29 @@ const fields = [
   { key: 'tipoDocumento', label: 'Tipo di documento' },
   { key: 'numeroDocumento', label: 'Numero documento' },
 ] as const
+
+async function copyIban() {
+  if (!props.data.iban) return
+  try {
+    await navigator.clipboard.writeText(props.data.iban)
+    copied.value = true
+    setTimeout(() => (copied.value = false), 1500)
+  } catch {
+    copied.value = false
+  }
+}
 </script>
 
 <template>
   <div class="personal-data">
     <div class="personal-data__header">
       <h3 class="personal-data__title">Dati personali</h3>
-      <bank-base-button variant="dark" size="sm" @click="$emit('edit')">
+      <bank-base-button
+        variant="dark"
+        size="sm"
+        aria-label="Modifica nome"
+        @click="$emit('edit')"
+      >
         <bank-base-icon name="user" :size="14" color="#ffffff" />
         Modifica nome
       </bank-base-button>
@@ -43,21 +62,21 @@ const fields = [
       <div class="personal-data__row">
         <span class="personal-data__label">IBAN</span>
         <div class="personal-data__iban">
-          <span class="personal-data__value">{{ data.iban || '-' }}</span>
-          <button class="personal-data__copy" aria-label="Копировать IBAN">
-            <bank-base-icon name="copy" :size="14" color="var(--text-secondary)" />
+          <span class="personal-data__value">{{ data.iban || '—' }}</span>
+          <button
+            class="personal-data__copy"
+            type="button"
+            :aria-label="copied ? 'IBAN скопирован' : 'Копировать IBAN'"
+            @click="copyIban"
+          >
+            <bank-base-icon
+              :name="copied ? 'check' : 'copy'"
+              :size="14"
+              :color="copied ? 'var(--text-brand)' : 'var(--text-brand)'"
+            />
           </button>
         </div>
       </div>
-    </div>
-    <div v-if="!compact" class="personal-data__iban-field">
-      <input
-        type="text"
-        class="personal-data__iban-input"
-        placeholder="Inserisci IBAN"
-        :value="data.iban"
-        readonly
-      />
     </div>
   </div>
 </template>
@@ -129,26 +148,6 @@ const fields = [
 }
 
 .personal-data__copy:hover { background-color: var(--border-default); }
-.personal-data__copy:focus-visible { outline: 2px solid var(--bg-brand); outline-offset: 2px; }
-
-.personal-data__iban-field {
-  margin-top: 8px;
-}
-
-.personal-data__iban-input {
-  width: 100%;
-  padding: 10px 14px;
-  background: var(--bg-page);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-button);
-  font-size: 13px;
-  color: var(--text-primary);
-  outline: none;
-}
-
-.personal-data__iban-input:focus {
-  border-color: var(--bg-brand);
-}
 
 @media (max-width: 767px) {
   .personal-data {

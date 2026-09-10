@@ -9,8 +9,18 @@ import BankBalanceCard from '@/components/domain/bank_balance_card.vue'
 import BankVerificationChecklist from '@/components/domain/bank_verification_checklist.vue'
 import BankPersonalDataCard from '@/components/sections/bank_personal_data_card.vue'
 import BankSecurityCard from '@/components/sections/bank_security_card.vue'
+import BankEditNameModal from '@/components/domain/bank_edit_name_modal.vue'
+import BankChangeEmailModal from '@/components/domain/bank_change_email_modal.vue'
+import BankChangePasswordModal from '@/components/domain/bank_change_password_modal.vue'
+import BankToast from '@/components/base/bank_toast.vue'
 
-const user: User = {
+const router = useRouter()
+const route = useRoute()
+
+const activePage = computed<PageName>(() => (route.path === '/profile' ? 'profile' : 'home'))
+const REAL_PAGES: PageName[] = ['home', 'profile']
+
+const user = ref<User>({
   id: 1,
   firstName: 'Marco',
   lastName: 'Rossi',
@@ -18,7 +28,7 @@ const user: User = {
   phone: '+39 333 123 4567',
   avatar: null,
   role: 'Borrower',
-}
+})
 
 const steps: Step[] = [
   { id: 1, label: 'Simul.', status: 'completed' },
@@ -28,15 +38,15 @@ const steps: Step[] = [
   { id: 5, label: 'Firma', status: 'pending' },
 ]
 
-const personalData: PersonalData = {
+const personalData = ref<PersonalData>({
   cognome: 'Intesa Sanpaolo S.p.A.',
   nome: 'Marco Rossi',
   email: 'ikoei@09gmail.com',
   importoApprovato: '12 000 €',
   tipoDocumento: 'Passaporto',
   numeroDocumento: 'AB1234567',
-  iban: '',
-}
+  iban: 'IT60X0542811101000000123456',
+})
 
 const checklistItems: ChecklistItem[] = [
   { id: 1, title: 'Simulazione completata', status: 'completed', label: 'Completato' },
@@ -52,25 +62,54 @@ const navItems: NavItem[] = [
   { id: 'profile', label: 'Profilo', icon: 'user', route: '/profile' },
 ]
 
-const router = useRouter()
-const route = useRoute()
-
-const activePage = computed<PageName>(() => (route.path === '/profile' ? 'profile' : 'home'))
 const emailVerified = ref(false)
+const editNameOpen = ref(false)
+const changeEmailOpen = ref(false)
+const changePasswordOpen = ref(false)
+const toast = ref('')
 
-const REAL_PAGES: PageName[] = ['home', 'profile']
+let toastTimer: ReturnType<typeof setTimeout> | null = null
 
 function handleNavigate(page: PageName) {
-  if (!REAL_PAGES.includes(page)) return
+  if (!REAL_PAGES.includes(page)) {
+    showToast(`Sezione «${page}» in arrivo`)
+    return
+  }
   router.push({ path: page === 'home' ? '/' : `/${page}` })
 }
 
-function handleAssistenza() {}
-function handleChecklistAction() {}
-function handleChangePassword() {}
-function handleChangeEmail() {}
-function SendVerification() {
+function showToast(message: string) {
+  toast.value = message
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => (toast.value = ''), 2500)
+}
+
+function handleAssistenza() {
+  showToast('Assistenza disponibile a breve (demo)')
+}
+
+function handleChecklistAction() {
+  showToast('Passo attuale: carica i tuoi documenti')
+}
+
+function handleEditNameSave(name: string) {
+  user.value.firstName = name.split(' ')[0] || name
+  user.value.lastName = name.split(' ').slice(1).join(' ') || user.value.lastName
+  showToast('Nome aggiornato')
+}
+
+function handleChangeEmailSave(email: string) {
+  user.value.email = email
+  showToast('Email aggiornata')
+}
+
+function handlePasswordSave() {
+  showToast('Password cambiata')
+}
+
+function handleSendVerification() {
   emailVerified.value = true
+  showToast('Email verificata')
 }
 </script>
 
@@ -96,14 +135,14 @@ function SendVerification() {
 
           <bank-personal-data-card
             :data="personalData"
-            @edit="() => {}"
+            @edit="editNameOpen = true"
           />
 
           <bank-security-card
             :email-verified="emailVerified"
-            @change-password="handleChangePassword"
-            @change-email="handleChangeEmail"
-            @send-verification="SendVerification"
+            @change-password="changePasswordOpen = true"
+            @change-email="changeEmailOpen = true"
+            @send-verification="handleSendVerification"
           />
         </div>
 
@@ -111,6 +150,7 @@ function SendVerification() {
           <bank-balance-card
             amount="€ 12 000"
             subtitle="Importo approvato dai nostri partner"
+            @withdraw="() => showToast('Preleva i fondi: disponibile dopo l\'approvazione dei documenti')"
           />
 
           <bank-verification-checklist
@@ -126,6 +166,27 @@ function SendVerification() {
       :active-page="activePage"
       @navigate="handleNavigate"
     />
+
+    <bank-edit-name-modal
+      :open="editNameOpen"
+      :current-name="`${user.firstName} ${user.lastName}`"
+      @close="editNameOpen = false"
+      @save="handleEditNameSave"
+    />
+
+    <bank-change-email-modal
+      :open="changeEmailOpen"
+      @close="changeEmailOpen = false"
+      @save="handleChangeEmailSave"
+    />
+
+    <bank-change-password-modal
+      :open="changePasswordOpen"
+      @close="changePasswordOpen = false"
+      @save="handlePasswordSave"
+    />
+
+    <bank-toast v-if="toast" :message="toast" />
   </div>
 </template>
 

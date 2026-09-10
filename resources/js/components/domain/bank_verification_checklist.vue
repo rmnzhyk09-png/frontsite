@@ -1,14 +1,22 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import type { ChecklistItem } from '@/types'
 import BankBaseIcon from '@/components/base/bank_base_icon.vue'
 
-defineProps<{
+const props = defineProps<{
   items: ChecklistItem[]
 }>()
 
 defineEmits<{
   action: [item: ChecklistItem]
 }>()
+
+const collapsed = ref(false)
+const isCollapsed = computed(() => collapsed.value)
+
+function toggleCollapse() {
+  collapsed.value = !collapsed.value
+}
 
 function getStatusColor(status: string): string {
   if (status === 'completed') return 'var(--bg-brand)'
@@ -30,14 +38,14 @@ function getStatusBorder(status: string): string {
         <span class="checklist__eyebrow">Completa tutti gli step</span>
         <span class="checklist__heading">Per il prelievo dei fondi, completa tutti gli step</span>
       </div>
-      <button class="checklist__collapse" aria-label="Свернуть">
+      <button class="checklist__collapse" type="button" aria-label="Свернуть" @click="toggleCollapse">
         <bank-base-icon name="chevron-down" :size="14" color="var(--text-secondary)" />
       </button>
     </div>
 
-    <div class="checklist__items">
+    <div v-if="!isCollapsed" class="checklist__items">
       <div
-        v-for="item in items"
+        v-for="(item, i) in items"
         :key="item.id"
         :class="['checklist__row', `checklist__row--${item.status}`]"
       >
@@ -54,8 +62,8 @@ function getStatusBorder(status: string): string {
             :size="16"
             color="#ffffff"
           />
-          <span v-else-if="item.status === 'current'" class="checklist__num">{{ item.id }}</span>
-          <span v-else class="checklist__num checklist__num--muted">{{ item.id }}</span>
+          <span v-else-if="item.status === 'current'" class="checklist__num">{{ i + 1 }}</span>
+          <span v-else class="checklist__num checklist__num--muted">{{ i + 1 }}</span>
         </div>
         <div class="checklist__text">
           <span :class="['checklist__item-title', `checklist__item-title--${item.status}`]">
@@ -82,14 +90,15 @@ function getStatusBorder(status: string): string {
       </div>
     </div>
 
-    <div class="checklist__progress">
+    <div class="checklist__progress" v-if="!isCollapsed">
       <div
         v-for="(_, i) in items"
         :key="i"
         :class="[
           'checklist__segment',
           { 'checklist__segment--filled': items[i]?.status === 'completed' },
-          { 'checklist__segment--empty': items[i]?.status === 'current' },
+          { 'checklist__segment--current': items[i]?.status === 'current' },
+          { 'checklist__segment--empty': items[i]?.status === 'pending' },
         ]"
       ></div>
     </div>
@@ -254,8 +263,12 @@ function getStatusBorder(status: string): string {
   background-color: var(--bg-brand);
 }
 
+.checklist__segment--current {
+  background: linear-gradient(90deg, var(--bg-brand), var(--border-default));
+}
+
 .checklist__segment--empty {
-  background-color: transparent;
+  background-color: var(--border-default);
 }
 
 @media (max-width: 767px) {

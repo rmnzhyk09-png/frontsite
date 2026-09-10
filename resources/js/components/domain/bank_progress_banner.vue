@@ -107,8 +107,8 @@ defineEmits<{
 }
 
 .progress-banner__checkbox {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 4px;
   border: 1px solid var(--border-brand);
   background-color: var(--bg-card);

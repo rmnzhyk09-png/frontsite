@@ -21,10 +21,10 @@ defineEmits<{
     <p class="balance-card__subtitle">{{ subtitle }}</p>
     <div class="balance-card__amount">{{ amount }}</div>
     <p class="balance-card__info">Prestito personale • TAN 3,8%</p>
-    <button class="balance-card__cta" aria-label="Preleva i fondi" @click="$emit('withdraw')">
+    <button class="balance-card__cta" type="button" aria-label="Preleva i fondi" @click="$emit('withdraw')">
       <bank-base-icon name="bank" :size="23" color="var(--text-brand)" />
       <span class="balance-card__cta-text">Preleva i fondi</span>
-      <span class="balance-card__cta-arrow">→</span>
+      <span class="balance-card__cta-arrow" aria-hidden="true">→</span>
     </button>
     <div class="balance-card__footer">
       <div class="balance-card__line"></div>
@@ -41,7 +41,7 @@ defineEmits<{
   gap: 12px;
   padding: 32px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--bg-brand), var(--bg-brand-dark));
+  background: var(--gradient-brand);
   color: var(--text-white);
 }
 
@@ -55,12 +55,14 @@ defineEmits<{
 .balance-card__saldo {
   font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.13px;
   color: var(--bg-brand-light);
 }
 
 .balance-card__subtitle {
   font-size: 16px;
   font-weight: 600;
+  letter-spacing: 0.16px;
   color: var(--bg-brand-light);
   text-align: center;
 }
@@ -69,7 +71,7 @@ defineEmits<{
   font-size: 52px;
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.78px;
 }
 
 .balance-card__info {
@@ -83,10 +85,10 @@ defineEmits<{
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: 20px 24px;
+  padding: 16px 24px;
   background-color: var(--bg-page);
   border: none;
-  border-radius: 14px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -95,16 +97,16 @@ defineEmits<{
   background-color: var(--border-default);
 }
 
-.balance-card__cta:focus-visible {
-  outline: 2px solid var(--text-white);
-  outline-offset: 2px;
-}
-
 .balance-card__cta-text {
   flex: 1;
   font-size: 18px;
   font-weight: 600;
-  color: var(--text-primary);
+  letter-spacing: 0.036px;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
   text-align: left;
 }
 
@@ -144,6 +146,7 @@ defineEmits<{
 
   .balance-card__amount {
     font-size: 36px;
+    letter-spacing: -0.54px;
   }
 
   .balance-card__subtitle {
