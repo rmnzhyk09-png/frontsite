@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import type { User, Step, PersonalData, ChecklistItem, NavItem, PageName } from '@/types'
 import BankHeader from '@/components/sections/bank_header.vue'
 import BankBottomNav from '@/components/sections/bank_bottom_nav.vue'
@@ -8,6 +9,11 @@ import BankBalanceCard from '@/components/domain/bank_balance_card.vue'
 import BankProgressBanner from '@/components/domain/bank_progress_banner.vue'
 import BankVerificationChecklist from '@/components/domain/bank_verification_checklist.vue'
 import BankPersonalDataCard from '@/components/sections/bank_personal_data_card.vue'
+
+const router = useRouter()
+const route = useRoute()
+
+const activePage = computed<PageName>(() => (route.path === '/profile' ? 'profile' : 'home'))
 
 const user: User = {
   id: 1,
@@ -51,10 +57,13 @@ const navItems: NavItem[] = [
   { id: 'profile', label: 'Profilo', icon: 'user', route: '/profile' },
 ]
 
-const activePage = ref<PageName>('home')
+const activePage = computed<PageName>(() => (route.path === '/profile' ? 'profile' : 'home'))
+
+const REAL_PAGES: PageName[] = ['home', 'profile']
 
 function handleNavigate(page: PageName) {
-  activePage.value = page
+  if (!REAL_PAGES.includes(page)) return
+  router.push({ path: page === 'home' ? '/' : `/${page}` })
 }
 
 function handleAssistenza() {}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import type { User, Step, PersonalData, ChecklistItem, NavItem, PageName } from '@/types'
 import BankHeader from '@/components/sections/bank_header.vue'
 import BankBottomNav from '@/components/sections/bank_bottom_nav.vue'
@@ -51,11 +52,17 @@ const navItems: NavItem[] = [
   { id: 'profile', label: 'Profilo', icon: 'user', route: '/profile' },
 ]
 
-const activePage = ref<PageName>('profile')
+const router = useRouter()
+const route = useRoute()
+
+const activePage = computed<PageName>(() => (route.path === '/profile' ? 'profile' : 'home'))
 const emailVerified = ref(false)
 
+const REAL_PAGES: PageName[] = ['home', 'profile']
+
 function handleNavigate(page: PageName) {
-  activePage.value = page
+  if (!REAL_PAGES.includes(page)) return
+  router.push({ path: page === 'home' ? '/' : `/${page}` })
 }
 
 function handleAssistenza() {}
