@@ -1,26 +1,24 @@
-import { createApp, h } from 'vue'
+import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './app.vue'
 import './css/app.css'
 
-import DashboardPage from './js/pages/DashboardPage.vue'
-
-const routes = [
-  {
-    path: '/',
-    name: 'dashboard',
-    component: DashboardPage,
-  },
-]
-
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      component: () => import('./js/pages/HomePage.vue'),
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('./js/pages/ProfilePage.vue'),
+    },
+  ],
 })
 
-const app = createApp({
-  render: () => h(App),
-})
-
+const app = createApp(App)
 app.use(router)
 app.mount('#app')

@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Figma exports
+figma_*.json
+figma_screenshots/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

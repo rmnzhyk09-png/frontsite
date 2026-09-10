@@ -1,123 +1,166 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
 import BankBaseIcon from '@/components/base/bank_base_icon.vue'
+import BankBaseBadge from '@/components/base/bank_base_badge.vue'
 
-const props = defineProps<{
-  totalBalance: number
-  currency: string
+defineProps<{
+  amount: string
+  subtitle: string
 }>()
 
-const hidden = ref(false)
-
-const formatted = computed(() => {
-  return props.totalBalance.toLocaleString('ru-RU', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
-})
-
-const displayValue = computed(() => {
-  return hidden.value ? '•••••••' : `${formatted.value}`
-})
-
-function toggleVisibility() {
-  hidden.value = !hidden.value
-}
+defineEmits<{
+  withdraw: []
+}>()
 </script>
 
 <template>
   <div class="balance-card">
-    <div class="balance-card__header">
-      <span class="balance-card__label">Общий баланс</span>
-      <button
-        class="balance-card__toggle"
-        :aria-label="hidden ? 'Показать баланс' : 'Скрыть баланс'"
-        @click="toggleVisibility"
-      >
-        <bank-base-icon :name="hidden ? 'eye-off' : 'eye'" :size="18" color="#ffffff" />
-      </button>
+    <div class="balance-card__meta">
+      <span class="balance-card__saldo">Il tuo saldo</span>
+      <bank-base-badge text="Completa i passaggi" variant="white" size="sm" />
     </div>
-    <div class="balance-card__amount">
-      {{ displayValue }}
-      <span v-if="!hidden" class="balance-card__currency">{{ currency }}</span>
-    </div>
+    <p class="balance-card__subtitle">{{ subtitle }}</p>
+    <div class="balance-card__amount">{{ amount }}</div>
+    <p class="balance-card__info">Prestito personale • TAN 3,8%</p>
+    <button class="balance-card__cta" aria-label="Preleva i fondi" @click="$emit('withdraw')">
+      <bank-base-icon name="bank" :size="23" color="var(--text-brand)" />
+      <span class="balance-card__cta-text">Preleva i fondi</span>
+      <span class="balance-card__cta-arrow">→</span>
+    </button>
     <div class="balance-card__footer">
-      <span class="balance-card__hint">По всем счетам и картам</span>
+      <div class="balance-card__line"></div>
+      <p class="balance-card__note">Fondi disponibili dopo l'approvazione dei documenti</p>
     </div>
   </div>
 </template>
 
 <style scoped>
 .balance-card {
-  background: linear-gradient(135deg, var(--c-navy), var(--c-navy-dark));
-  border-radius: var(--radius-xl);
-  padding: 24px;
-  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--bg-brand), var(--bg-brand-dark));
+  color: var(--text-white);
 }
 
-.balance-card__header {
+.balance-card__meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
-.balance-card__label {
+.balance-card__saldo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bg-brand-light);
+}
+
+.balance-card__subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bg-brand-light);
+  text-align: center;
+}
+
+.balance-card__amount {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.balance-card__info {
   font-size: 14px;
-  font-weight: 500;
-  opacity: 0.7;
+  font-weight: 400;
+  color: var(--bg-brand-light);
 }
 
-.balance-card__toggle {
+.balance-card__cta {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  gap: 12px;
+  width: 100%;
+  padding: 20px 24px;
+  background-color: var(--bg-page);
   border: none;
+  border-radius: 14px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.balance-card__toggle:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+.balance-card__cta:hover {
+  background-color: var(--border-default);
 }
 
-.balance-card__toggle:focus-visible {
-  outline: 2px solid #ffffff;
+.balance-card__cta:focus-visible {
+  outline: 2px solid var(--text-white);
   outline-offset: 2px;
 }
 
-.balance-card__amount {
-  font-size: 36px;
-  font-weight: 800;
-  margin: 16px 0 8px;
-  letter-spacing: -0.5px;
+.balance-card__cta-text {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: left;
 }
 
-.balance-card__currency {
+.balance-card__cta-arrow {
   font-size: 18px;
   font-weight: 500;
-  opacity: 0.7;
+  color: var(--text-primary);
 }
 
 .balance-card__footer {
-  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
-.balance-card__hint {
+.balance-card__line {
+  width: 100px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.balance-card__note {
   font-size: 12px;
-  opacity: 0.5;
+  font-weight: 400;
+  color: var(--bg-brand-light);
+  text-align: center;
+  opacity: 0.8;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 767px) {
   .balance-card {
-    padding: 28px 32px;
+    padding: 20px;
+    gap: 8px;
   }
 
   .balance-card__amount {
-    font-size: 42px;
+    font-size: 36px;
+  }
+
+  .balance-card__subtitle {
+    font-size: 10px;
+  }
+
+  .balance-card__info {
+    font-size: 12px;
+  }
+
+  .balance-card__cta {
+    padding: 12px 16px;
+    border-radius: 9px;
+  }
+
+  .balance-card__cta-text {
+    font-size: 16px;
   }
 }
 </style>

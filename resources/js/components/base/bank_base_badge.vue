@@ -1,24 +1,13 @@
 <script setup lang="ts">
 defineProps<{
   text: string
-  variant?: 'success' | 'error' | 'warning' | 'info' | 'neutral'
+  variant?: 'brand' | 'success' | 'error' | 'neutral' | 'white'
   size?: 'sm' | 'md'
 }>()
-
-function getColor(type: string): string {
-  const map: Record<string, string> = {
-    success: 'badge--success',
-    error: 'badge--error',
-    warning: 'badge--warning',
-    info: 'badge--info',
-    neutral: 'badge--neutral',
-  }
-  return map[type] || 'badge--neutral'
-}
 </script>
 
 <template>
-  <span :class="['badge', getColor(variant || 'neutral'), `badge--${size || 'md'}`]" role="status">
+  <span :class="['badge', `badge--${variant || 'neutral'}`, `badge--${size || 'md'}`]" role="status">
     {{ text }}
   </span>
 </template>
@@ -27,45 +16,16 @@ function getColor(type: string): string {
 .badge {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  border-radius: 20px;
+  font-family: var(--font-main);
+  font-weight: 700;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
-
-.badge--sm {
-  padding: 2px 8px;
-  font-size: 11px;
-}
-
-.badge--md {
-  padding: 4px 12px;
-  font-size: 12px;
-}
-
-.badge--success {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-.badge--error {
-  background-color: #ffebee;
-  color: #c62828;
-}
-
-.badge--warning {
-  background-color: #fff3e0;
-  color: #e65100;
-}
-
-.badge--info {
-  background-color: #e3f2fd;
-  color: #1565c0;
-}
-
-.badge--neutral {
-  background-color: var(--c-gray-100);
-  color: var(--c-text-secondary);
-}
+.badge--sm { padding: 2px 8px; font-size: 11px; }
+.badge--md { padding: 4px 12px; font-size: 12px; }
+.badge--brand { background-color: var(--bg-brand); color: var(--text-white); }
+.badge--success { background-color: var(--bg-brand); color: var(--text-white); }
+.badge--error { background-color: var(--bg-danger); color: var(--text-white); }
+.badge--neutral { background-color: var(--bg-pending); color: var(--text-secondary); }
+.badge--white { background-color: var(--bg-card); color: var(--text-primary); }
 </style>
