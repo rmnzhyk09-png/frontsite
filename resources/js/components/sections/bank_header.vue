@@ -181,8 +181,8 @@ defineEmits<{
 
 .header__badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -10px;
+  right: -11px;
   width: 22px;
   height: 22px;
   border-radius: 11px;
@@ -193,7 +193,11 @@ defineEmits<{
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--bg-card);
+  border: 2px solid var(--text-white);
+}
+
+.header__actions {
+  display: none;
 }
 
 .header__bottom {
@@ -243,17 +247,17 @@ defineEmits<{
     position: absolute;
     top: -4px;
     right: -4px;
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
+    width: 13px;
+    height: 13px;
+    border-radius: 6.33px;
     background-color: var(--bg-danger);
     color: var(--text-white);
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--bg-card);
+    border: 1px solid var(--bg-card);
   }
 
   .header__avatar-wrap {
