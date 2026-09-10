@@ -65,6 +65,7 @@ defineEmits<{
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(36, 145, 170, 0.19);
 }
 
 .progress-banner__content {
@@ -133,6 +134,7 @@ defineEmits<{
   justify-content: center;
   flex-shrink: 0;
   transition: background-color 0.2s;
+  box-shadow: 0 4px 8px rgba(36, 145, 170, 0.25);
 }
 
 .progress-banner__arrow:hover {

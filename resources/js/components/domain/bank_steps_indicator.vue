@@ -67,6 +67,7 @@ const completedCount = computed(() => props.steps.filter(s => s.status === 'comp
   background: var(--bg-card);
   border: 1px solid var(--border-steps);
   border-radius: var(--radius-card);
+  box-shadow: 0 2px 8px rgba(26, 35, 50, 0.06);
 }
 
 .steps__header {

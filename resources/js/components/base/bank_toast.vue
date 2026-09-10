@@ -31,7 +31,7 @@ defineProps<{
   background: var(--text-primary);
   color: var(--text-white);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   max-width: calc(100vw - 32px);
   animation: toast-in 0.2s ease;
 }

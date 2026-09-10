@@ -5,7 +5,6 @@ import type { User, Step, PersonalData, ChecklistItem, NavItem, PageName } from 
 import BankHeader from '@/components/sections/bank_header.vue'
 import BankBottomNav from '@/components/sections/bank_bottom_nav.vue'
 import BankStepsIndicator from '@/components/domain/bank_steps_indicator.vue'
-import BankBalanceCard from '@/components/domain/bank_balance_card.vue'
 import BankVerificationChecklist from '@/components/domain/bank_verification_checklist.vue'
 import BankPersonalDataCard from '@/components/sections/bank_personal_data_card.vue'
 import BankSecurityCard from '@/components/sections/bank_security_card.vue'
@@ -158,10 +157,9 @@ function handleSendVerification() {
         </div>
 
         <div class="page__right">
-          <bank-balance-card
-            amount="€ 12 000"
-            subtitle="Importo approvato dai nostri partner"
-            @withdraw="() => showToast('Preleva i fondi: disponibile dopo l\'approvazione dei documenti')"
+          <bank-personal-data-card
+            :data="personalData"
+            compact
           />
 
           <bank-verification-checklist

@@ -113,6 +113,7 @@ function getStatusBorder(status: string): string {
   border: 1px solid var(--border-default);
   border-radius: var(--radius-card);
   overflow: hidden;
+  box-shadow: 0 4px 16px rgba(26, 35, 50, 0.03);
 }
 
 .checklist__header {
@@ -181,6 +182,7 @@ function getStatusBorder(status: string): string {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(36, 145, 170, 0.19);
 }
 
 .checklist__num {

@@ -145,9 +145,9 @@ function handleEditNameSave(name: string) {
 
         <div class="page__right">
           <bank-personal-data-card
-            :data="personalData"
-            @edit="editNameOpen = true"
-          />
+          :data="personalData"
+          compact
+        />
 
           <bank-verification-checklist
             :items="checklistItems"

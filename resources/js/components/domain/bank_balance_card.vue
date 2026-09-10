@@ -43,6 +43,7 @@ defineEmits<{
   border-radius: var(--radius-lg);
   background: var(--gradient-brand);
   color: var(--text-white);
+  box-shadow: 0 8px 24px rgba(36, 145, 170, 0.19);
 }
 
 .balance-card__meta {

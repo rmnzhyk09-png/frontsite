@@ -18,6 +18,9 @@ const copied = ref(false)
 const fields = [
   { key: 'cognome', label: 'Cognome' },
   { key: 'nome', label: 'Nome' },
+] as const
+
+const fullFields = [
   { key: 'email', label: 'Email' },
   { key: 'importoApprovato', label: 'Importo approvato' },
   { key: 'tipoDocumento', label: 'Tipo di documento' },
@@ -37,10 +40,11 @@ async function copyIban() {
 </script>
 
 <template>
-  <div class="personal-data">
+  <div :class="['personal-data', { 'personal-data--compact': props.compact }]">
     <div class="personal-data__header">
       <h3 class="personal-data__title">Dati personali</h3>
       <bank-base-button
+        v-if="!props.compact"
         variant="dark"
         size="sm"
         aria-label="Modifica nome"
@@ -59,24 +63,34 @@ async function copyIban() {
         <span class="personal-data__label">{{ field.label }}</span>
         <span class="personal-data__value">{{ data[field.key] }}</span>
       </div>
-      <div class="personal-data__row">
-        <span class="personal-data__label">IBAN</span>
-        <div class="personal-data__iban">
-          <span class="personal-data__value">{{ data.iban || '—' }}</span>
-          <button
-            class="personal-data__copy"
-            type="button"
-            :aria-label="copied ? 'IBAN скопирован' : 'Копировать IBAN'"
-            @click="copyIban"
-          >
-            <bank-base-icon
-              :name="copied ? 'check' : 'copy'"
-              :size="14"
-              :color="copied ? 'var(--text-brand)' : 'var(--text-brand)'"
-            />
-          </button>
+      <template v-if="!props.compact">
+        <div
+          v-for="field in fullFields"
+          :key="field.key"
+          class="personal-data__row"
+        >
+          <span class="personal-data__label">{{ field.label }}</span>
+          <span class="personal-data__value">{{ data[field.key] }}</span>
         </div>
-      </div>
+        <div class="personal-data__row">
+          <span class="personal-data__label">IBAN</span>
+          <div class="personal-data__iban">
+            <span class="personal-data__value">{{ data.iban || '—' }}</span>
+            <button
+              class="personal-data__copy"
+              type="button"
+              :aria-label="copied ? 'IBAN скопирован' : 'Копировать IBAN'"
+              @click="copyIban"
+            >
+              <bank-base-icon
+                :name="copied ? 'check' : 'copy'"
+                :size="14"
+                color="var(--text-brand)"
+              />
+            </button>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -99,9 +113,18 @@ async function copyIban() {
 }
 
 .personal-data__title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.personal-data--compact {
+  gap: 20px;
+  padding: 24px;
+}
+
+.personal-data--compact .personal-data__fields {
+  gap: 12px;
 }
 
 .personal-data__fields {
