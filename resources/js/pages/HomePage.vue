@@ -57,8 +57,6 @@ const navItems: NavItem[] = [
   { id: 'profile', label: 'Profilo', icon: 'user', route: '/profile' },
 ]
 
-const activePage = computed<PageName>(() => (route.path === '/profile' ? 'profile' : 'home'))
-
 const REAL_PAGES: PageName[] = ['home', 'profile']
 
 function handleNavigate(page: PageName) {
