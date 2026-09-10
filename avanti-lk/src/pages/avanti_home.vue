@@ -1,9 +1,9 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import AvantiCard from '@/components/avanti_card.vue'
-import AvantiProgressStepper from '@/components/avanti_progress_stepper.vue'
-import AvantiApprovalCard from '@/components/avanti_approval_card.vue'
+import AvantiHeader from '@/components/avanti_header.vue'
+import AvantiBottomNav from '@/components/avanti_bottom_nav.vue'
 import AvantiAlertBanner from '@/components/avanti_alert_banner.vue'
+import AvantiAmountCard from '@/components/avanti_amount_card.vue'
 import AvantiProfileCard from '@/components/avanti_profile_card.vue'
 import AvantiInfoPanel from '@/components/avanti_info_panel.vue'
 import AvantiButton from '@/components/avanti_button.vue'
@@ -47,11 +47,20 @@ function goToBankLoading() {
 
 <template>
   <div class="avanti-home">
+    <avanti-header />
+
     <div class="avanti-home__content">
       <div class="avanti-home__main">
-        <avanti-progress-stepper :steps="steps" :current="3" />
+        <div class="avanti-home__section">
+          <h2 class="avanti-home__section-title">Benvenuto, Marco Rossi!</h2>
+        </div>
 
-        <avanti-approval-card />
+        <avanti-amount-card
+          amount="€ 12 000"
+          caption="100% del totale disponibile"
+          cta-label="Preleva i fondi"
+          @cta="goToBankLoading"
+        />
 
         <avanti-alert-banner
           title="La tua pratica è in fase di approvazione finale"
@@ -61,6 +70,16 @@ function goToBankLoading() {
             <avanti-button size="sm" text="Finalizza la mia richiesta" @click="goToBankLoading" />
           </template>
         </avanti-alert-banner>
+
+        <div class="avanti-home__section">
+          <h2 class="avanti-home__section-title">Le tue pratiche</h2>
+        </div>
+
+        <avanti-info-panel
+          name="Marco Rossi"
+          email="ikoei@09gmail.com"
+          :items="infoPanelItems"
+        />
       </div>
 
       <aside v-if="isMobile" class="avanti-home__sidebar">
@@ -72,12 +91,6 @@ function goToBankLoading() {
             </div>
           </template>
         </avanti-profile-card>
-
-        <avanti-info-panel
-          name="Marco Rossi"
-          email="ikoei@09gmail.com"
-          :items="infoPanelItems"
-        />
       </aside>
 
       <aside v-else class="avanti-home__sidebar">
@@ -87,29 +100,26 @@ function goToBankLoading() {
           edit-label="Modifica"
           @edit="goToProfile"
         />
-
-        <avanti-info-panel
-          name="Marco Rossi"
-          email="ikoei@09gmail.com"
-          :items="infoPanelItems"
-        />
       </aside>
     </div>
+
+    <avanti-bottom-nav />
   </div>
 </template>
 
 <style scoped>
 .avanti-home {
-  width: 100%;
-  padding: 40px;
-  max-width: var(--avanti-content-max);
-  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--avanti-bg);
 }
 
 .avanti-home__content {
   display: flex;
   gap: 40px;
   align-items: flex-start;
+  flex: 1;
 }
 
 .avanti-home__main {
@@ -118,6 +128,7 @@ function goToBankLoading() {
   flex-direction: column;
   gap: 32px;
   min-width: 0;
+  padding: 40px;
 }
 
 .avanti-home__sidebar {
@@ -128,12 +139,26 @@ function goToBankLoading() {
   flex-shrink: 0;
 }
 
+.avanti-home__section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avanti-home__section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--avanti-text-dark);
+}
+
 .avanti-home__iban {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--avanti-border);
 }
 
 .avanti-home__iban-label {
@@ -148,12 +173,12 @@ function goToBankLoading() {
 }
 
 @media (max-width: 1024px) {
-  .avanti-home {
-    padding: 24px;
-  }
-
   .avanti-home__content {
     gap: 24px;
+  }
+
+  .avanti-home__main {
+    padding: 24px;
   }
 
   .avanti-home__sidebar {
@@ -163,7 +188,7 @@ function goToBankLoading() {
 
 @media (max-width: 768px) {
   .avanti-home {
-    padding: 20px 16px;
+    padding-bottom: 62px;
   }
 
   .avanti-home__content {
@@ -171,9 +196,18 @@ function goToBankLoading() {
     gap: 20px;
   }
 
+  .avanti-home__main {
+    padding: 16px;
+    gap: 20px;
+  }
+
   .avanti-home__sidebar {
     width: 100%;
     gap: 20px;
+  }
+
+  .avanti-home__section-title {
+    font-size: 18px;
   }
 }
 </style>
