@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+build/
+public/build/
+public/hot
+
+# Laravel
+vendor/
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+storage/logs/*
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/framework/testing/*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel/
+
+# Local config
+.env.local
+.env.*.local
+.vercel
