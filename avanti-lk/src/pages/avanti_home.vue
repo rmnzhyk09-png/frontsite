@@ -39,6 +39,10 @@ const infoPanelItems = [
 function goToProfile() {
   router.push({ name: 'profile' })
 }
+
+function goToBankLoading() {
+  router.push({ name: 'bankLoading' })
+}
 </script>
 
 <template>
@@ -54,7 +58,7 @@ function goToProfile() {
           description="Il tuo documento è stato inviato. La consulente ti contatterà entro 24 ore."
         >
           <template #action>
-            <avanti-button size="sm" text="Finalizza la mia richiesta" @click="goToProfile" />
+            <avanti-button size="sm" text="Finalizza la mia richiesta" @click="goToBankLoading" />
           </template>
         </avanti-alert-banner>
       </div>

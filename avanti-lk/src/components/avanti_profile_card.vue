@@ -29,7 +29,12 @@ function onEdit() {
   <avanti-card class="avanti-profile-card">
     <div class="avanti-profile-card__head">
       <h2 class="avanti-profile-card__title">{{ title }}</h2>
-      <avanti-button-outline size="sm" :text="editLabel" @click="onEdit" />
+      <avanti-button-outline
+        v-if="editLabel"
+        size="sm"
+        :text="editLabel"
+        @click="onEdit"
+      />
     </div>
     <div class="avanti-profile-card__body">
       <avanti-form-row

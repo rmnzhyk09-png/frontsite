@@ -1,9 +1,13 @@
 :root {
   --avanti-primary: #2491AA;
   --avanti-primary-dark: #1A7A90;
+  --avanti-gradient-start: #2491AA;
+  --avanti-gradient-end: #1A7488;
   --avanti-dark: #1A2332;
   --avanti-near-black: #09090B;
   --avanti-muted: #71717A;
+  --avanti-muted-2: #70707A;
+  --avanti-muted-3: #737373;
   --avanti-muted-light: #A1A1AA;
   --avanti-border: #E4E4E7;
   --avanti-border-alt: #E2EDF0;
@@ -18,10 +22,17 @@
   --avanti-disabled-bg: #F4F4F5;
   --avanti-disabled-border: #D4D4D8;
   --avanti-amount-bg: #F0FDFA;
+  --avanti-success: #1E7D33;
+  --avanti-track: #E8E8E8;
+  --avanti-bank-name: #414141;
+  --avanti-secondary-btn: #FAFAFA;
+  --avanti-bank-border: #9F9F9F;
   --avanti-text-dark: #1A2332;
   --avanti-text-muted: #71717A;
   --avanti-text-gray: #6B7280;
   --avanti-text-light: #FAFAFA;
+
+  --avanti-shadow-card-teal: 0 8px 24px rgba(36, 145, 170, 0.19);
 
   --avanti-radius-card: 16px;
   --avanti-radius-large: 24px;

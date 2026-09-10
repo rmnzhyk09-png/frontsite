@@ -1,12 +1,20 @@
 <script setup>
+import { ref, computed } from 'vue'
 import AvantiProgressStepper from '@/components/avanti_progress_stepper.vue'
 import AvantiProfileCard from '@/components/avanti_profile_card.vue'
 import AvantiSecurityCard from '@/components/avanti_security_card.vue'
 import AvantiInfoPanel from '@/components/avanti_info_panel.vue'
 import AvantiTextInput from '@/components/avanti_text_input.vue'
+import AvantiEditModal from '@/components/avanti_edit_modal.vue'
+import AvantiSmsToast from '@/components/avanti_sms_toast.vue'
 import { useResponsive } from '@/composables/avanti_useResponsive'
+import { useProfile } from '@/composables/avanti_useProfile'
 
 const { isMobile } = useResponsive()
+const { profile, doVerifyEmail } = useProfile()
+
+const editModal = ref(null)
+const toast = ref('')
 
 const steps = [
   { label: 'Simul.' },
@@ -16,14 +24,14 @@ const steps = [
   { label: 'Firma' },
 ]
 
-const profileRows = [
-  { label: 'Cognome', value: 'Rossi', strong: true },
-  { label: 'Nome', value: 'Marco', strong: true },
-  { label: 'Email', value: 'ikoei@09gmail.com' },
-  { label: 'Importo approvato', value: '12 000 ₽', strong: true },
+const profileRows = computed(() => [
+  { label: 'Cognome', value: profile.value ? profile.value.cognome : 'Rossi', strong: true },
+  { label: 'Nome', value: profile.value ? profile.value.nome : 'Marco', strong: true },
+  { label: 'Email', value: profile.value ? profile.value.email : 'ikoei@09gmail.com' },
+  { label: 'Importo approvato', value: profile.value ? `${profile.value.amount} ₽` : '12 000 ₽', strong: true },
   { label: 'Tipo di documento', value: 'Passaporto' },
   { label: 'Numero documento', value: 'AB1234567' },
-]
+])
 
 const infoPanelItems = [
   { label: 'Simulazione', status: 'Completata', initials: 'SI' },
@@ -33,20 +41,20 @@ const infoPanelItems = [
   { label: 'Firma', status: 'Prossimo', initials: 'FI', disabled: true },
 ]
 
-function onEdit() {
-  alert('Modifica nome')
+function openEdit(action) {
+  editModal.value = action
 }
 
-function onChangePassword() {
-  alert('Cambia password')
+function onEditSaved() {
+  editModal.value = null
+  toast.value = 'Profilo aggiornato correttamente.'
 }
 
-function onChangeEmail() {
-  alert('Cambia email')
-}
-
-function onVerifyEmail() {
-  alert('Verifica email')
+async function onVerifyEmail() {
+  const ok = await doVerifyEmail()
+  toast.value = ok
+    ? 'Email verificata. Grazie!'
+    : 'Impossibile verificare email. Riprova.'
 }
 </script>
 
@@ -60,7 +68,7 @@ function onVerifyEmail() {
           title="Dati personali"
           edit-label="Modifica nome"
           :rows="profileRows"
-          @edit="onEdit"
+          @edit="openEdit('name')"
         >
           <template v-if="isMobile" #extra>
             <div class="avanti-profile__iban">
@@ -74,8 +82,8 @@ function onVerifyEmail() {
         </avanti-profile-card>
 
         <avanti-security-card
-          @change-password="onChangePassword"
-          @change-email="onChangeEmail"
+          @change-password="openEdit('password')"
+          @change-email="openEdit('email')"
           @verify-email="onVerifyEmail"
         />
       </div>
@@ -88,6 +96,15 @@ function onVerifyEmail() {
         />
       </aside>
     </div>
+
+    <avanti-edit-modal
+      :open="editModal !== null"
+      :action="editModal || 'email'"
+      @close="editModal = null"
+      @saved="onEditSaved"
+    />
+
+    <avanti-sms-toast v-if="toast" :message="toast" @close="toast = ''" />
   </div>
 </template>
 

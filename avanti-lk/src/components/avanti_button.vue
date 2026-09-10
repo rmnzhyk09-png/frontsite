@@ -31,7 +31,9 @@ defineProps({
     class="avanti-button"
     :class="[`avanti-button--${size}`, { 'avanti-button--block': block }]"
   >
+    <slot name="icon" />
     <slot>{{ text }}</slot>
+    <slot name="after" />
   </button>
 </template>
 

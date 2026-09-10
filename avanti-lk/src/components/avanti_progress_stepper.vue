@@ -1,5 +1,5 @@
 <script setup>
-defineProps({
+const props = defineProps({
   steps: {
     type: Array,
     required: true,
@@ -19,8 +19,8 @@ defineProps({
 })
 
 function stateOf(index) {
-  if (index < current) return 'done'
-  if (index === current) return 'active'
+  if (index < props.current) return 'done'
+  if (index === props.current) return 'active'
   return 'pending'
 }
 </script>

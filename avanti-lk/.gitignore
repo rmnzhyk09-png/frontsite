@@ -35,6 +35,10 @@ Thumbs.db
 # Vercel
 .vercel/
 
+# Smoke test
+.smoke/
+smoke.mjs
+
 # Local config
 .env.local
 .env.*.local

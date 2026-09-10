@@ -8,6 +8,10 @@ defineProps({
     type: String,
     default: 'button',
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
   size: {
     type: String,
     default: 'md',
@@ -19,10 +23,13 @@ defineProps({
 <template>
   <button
     :type="type"
+    :disabled="disabled"
     class="avanti-button-outline"
     :class="`avanti-button-outline--${size}`"
   >
+    <slot name="icon" />
     <slot>{{ text }}</slot>
+    <slot name="after" />
   </button>
 </template>
 
@@ -50,7 +57,12 @@ defineProps({
   font-size: 13px;
 }
 
-.avanti-button-outline:hover {
+.avanti-button-outline:hover:not(:disabled) {
   background-color: var(--avanti-info-bg);
+}
+
+.avanti-button-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
