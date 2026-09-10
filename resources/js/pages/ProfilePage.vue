@@ -174,6 +174,7 @@ function handleSendVerification() {
       :nav-items="navItems"
       :active-page="activePage"
       @navigate="handleNavigate"
+      @assistenza="handleAssistenza"
     />
 
     <bank-edit-name-modal

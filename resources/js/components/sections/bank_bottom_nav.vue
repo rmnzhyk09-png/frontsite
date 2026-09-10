@@ -9,6 +9,7 @@ defineProps<{
 
 defineEmits<{
   navigate: [page: PageName]
+  assistenza: []
 }>()
 </script>
 
@@ -24,6 +25,10 @@ defineEmits<{
     >
       <bank-base-icon :name="item.icon" :size="18" />
       <span class="bottom-nav__label">{{ item.label }}</span>
+    </button>
+    <button class="bottom-nav__assist" type="button" @click="$emit('assistenza')">
+      <bank-base-icon name="message" :size="14" color="#ffffff" />
+      <span class="bottom-nav__assist-label">Assistenza</span>
     </button>
   </nav>
 </template>
@@ -42,6 +47,12 @@ defineEmits<{
   left: 0;
   right: 0;
   z-index: 100;
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none;
+  }
 }
 
 .bottom-nav__item {
@@ -77,5 +88,37 @@ defineEmits<{
 .bottom-nav__label {
   font-size: 10px;
   font-weight: 600;
+}
+
+.bottom-nav__assist {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 108px;
+  height: 43px;
+  padding: 4px 16px;
+  background: var(--bg-brand);
+  border: 1px solid var(--text-white);
+  box-shadow: 0 0 12px rgba(36, 145, 170, 0.55);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.bottom-nav__assist:hover {
+  background-color: var(--bg-brand-dark);
+}
+
+.bottom-nav__assist:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.bottom-nav__assist-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-white);
+  white-space: nowrap;
 }
 </style>

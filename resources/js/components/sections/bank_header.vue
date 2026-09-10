@@ -168,16 +168,21 @@ defineEmits<{
   border-radius: var(--radius-button);
   background: var(--bg-brand);
   border: none;
+  box-sizing: border-box;
   cursor: pointer;
   font-family: var(--font-main);
   font-size: 16px;
   font-weight: 600;
   color: var(--text-white);
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, box-shadow 0.2s;
   position: relative;
 }
 
-.header__assistenza:hover { background-color: var(--bg-brand-dark); }
+.header__assistenza:hover {
+  background-color: var(--bg-brand-dark);
+  box-shadow: 0 0 12px rgba(36, 145, 170, 0.6);
+  border: 1px solid var(--text-white);
+}
 
 .header__badge {
   position: absolute;
@@ -237,10 +242,16 @@ defineEmits<{
     border-radius: 6.33px;
     background: var(--bg-brand-light);
     border: none;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-brand);
+  }
+
+  .header__bell:hover {
+    border: 1px solid var(--border-brand);
+    box-shadow: 0 0 12px rgba(36, 145, 170, 0.35);
   }
 
   .header__bell-count {
