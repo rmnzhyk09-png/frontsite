@@ -12,6 +12,7 @@ import BankSecurityCard from '@/components/sections/bank_security_card.vue'
 import BankEditNameModal from '@/components/domain/bank_edit_name_modal.vue'
 import BankChangeEmailModal from '@/components/domain/bank_change_email_modal.vue'
 import BankChangePasswordModal from '@/components/domain/bank_change_password_modal.vue'
+import BankDocumentModal from '@/components/domain/bank_document_modal.vue'
 import BankToast from '@/components/base/bank_toast.vue'
 
 const router = useRouter()
@@ -66,11 +67,16 @@ const emailVerified = ref(false)
 const editNameOpen = ref(false)
 const changeEmailOpen = ref(false)
 const changePasswordOpen = ref(false)
+const documentModalOpen = ref(false)
 const toast = ref('')
 
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 
 function handleNavigate(page: PageName) {
+  if (page === 'documents') {
+    documentModalOpen.value = true
+    return
+  }
   if (!REAL_PAGES.includes(page)) {
     showToast(`Sezione «${page}» in arrivo`)
     return
@@ -89,7 +95,12 @@ function handleAssistenza() {
 }
 
 function handleChecklistAction() {
-  showToast('Passo attuale: carica i tuoi documenti')
+  documentModalOpen.value = true
+}
+
+function handleDocumentSubmit(iban: string) {
+  personalData.value.iban = iban
+  showToast('IBAN aggiornato')
 }
 
 function handleEditNameSave(name: string) {
@@ -184,6 +195,12 @@ function handleSendVerification() {
       :open="changePasswordOpen"
       @close="changePasswordOpen = false"
       @save="handlePasswordSave"
+    />
+
+    <bank-document-modal
+      :open="documentModalOpen"
+      @close="documentModalOpen = false"
+      @submit="handleDocumentSubmit"
     />
 
     <bank-toast v-if="toast" :message="toast" />

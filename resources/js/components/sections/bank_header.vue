@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NavItem, User, PageName } from '@/types'
+import bankLogo from '@/assets/logo.png'
 import BankBaseIcon from '@/components/base/bank_base_icon.vue'
 import BankBaseAvatar from '@/components/base/bank_base_avatar.vue'
 
@@ -22,9 +23,7 @@ defineEmits<{
       <div class="header__inner">
         <div class="header__nav">
           <div class="header__logo">
-            <span class="header__logo-mark" aria-hidden="true">
-              <bank-base-icon name="bank" :size="24" color="#2491aa" />
-            </span>
+            <img class="header__logo-mark" :src="bankLogo" width="48" height="37.6" alt="Avanti" />
             <span class="header__logo-text">Avanti</span>
           </div>
           <nav class="header__menu" aria-label="Основная навигация">

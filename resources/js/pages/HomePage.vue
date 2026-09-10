@@ -10,6 +10,7 @@ import BankProgressBanner from '@/components/domain/bank_progress_banner.vue'
 import BankVerificationChecklist from '@/components/domain/bank_verification_checklist.vue'
 import BankPersonalDataCard from '@/components/sections/bank_personal_data_card.vue'
 import BankEditNameModal from '@/components/domain/bank_edit_name_modal.vue'
+import BankDocumentModal from '@/components/domain/bank_document_modal.vue'
 import BankToast from '@/components/base/bank_toast.vue'
 
 const router = useRouter()
@@ -61,11 +62,16 @@ const navItems: NavItem[] = [
 ]
 
 const editNameOpen = ref(false)
+const documentModalOpen = ref(false)
 const toast = ref('')
 
 let toastTimer: ReturnType<typeof setTimeout> | null = null
 
 function handleNavigate(page: PageName) {
+  if (page === 'documents') {
+    documentModalOpen.value = true
+    return
+  }
   if (!REAL_PAGES.includes(page)) {
     showToast(`Sezione «${page}» in arrivo`)
     return
@@ -88,7 +94,12 @@ function handleWithdraw() {
 }
 
 function handleChecklistAction() {
-  showToast('Passo attuale: carica i tuoi documenti')
+  documentModalOpen.value = true
+}
+
+function handleDocumentSubmit(iban: string) {
+  personalData.value.iban = iban
+  showToast('IBAN aggiornato')
 }
 
 function handleEditNameSave(name: string) {
@@ -157,6 +168,12 @@ function handleEditNameSave(name: string) {
       :current-name="`${user.firstName} ${user.lastName}`"
       @close="editNameOpen = false"
       @save="handleEditNameSave"
+    />
+
+    <bank-document-modal
+      :open="documentModalOpen"
+      @close="documentModalOpen = false"
+      @submit="handleDocumentSubmit"
     />
 
     <bank-toast v-if="toast" :message="toast" />
